@@ -59,7 +59,8 @@ python scripts/export_autofit.py 简历_某版本.html   # 已内置编码+压�
 ```
 
 - **必须用独立 `--user-data-dir`**(Windows 风格路径,勿用 POSIX /tmp),否则吸附已运行的 Chrome 报 0x5
-- 输出先写 ASCII 临时名再 `mv -f` 替换(目标被查看器占用时尤其重要)
+- **必须加 `--virtual-time-budget=15000`**:无头打印可能在 Google Fonts 异步加载完成前就截图,导致 PDF 回落本地字体(雅黑/Arial);加此参数等待字体就绪(2026-08-23 实测:不加→嵌入 MicrosoftYaHei,加→嵌入 NotoSansSC)
+- 输出先写 ASCII 临时名再 `mv -f` 替换(目标被查看器占用时尤其重要);传给 `--print-to-pdf` 的路径**必须是绝对路径**(Chrome 把相对路径解析到自身安装目录)
 - **溢出压页**:注入 `/*AUTO-FIT*/ .resume{zoom:X}`,X 从 0.97 逐级下探(0.95/0.93/0.91/0.89/0.87/0.85)直到恰好一页;zoom < 0.85 仍溢出时改收行距/边距(密度优先于缩字)
 - **验证必须内容级**:真实简历通常 ≥150KB 且含嵌入图片(`/Subtype /Image`);错误页恒 ≈39KB 且也是"1 页"——**只查页数必被欺骗**(2026-08-22 事故:19 个 PDF 全是错误页,两轮"验证通过"都是假的)
 
