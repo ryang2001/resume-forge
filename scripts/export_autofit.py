@@ -64,9 +64,10 @@ def export(chrome: str, html: Path, out: Path):
     with tempfile.TemporaryDirectory() as ud:
         subprocess.run(
             [chrome, '--headless=new', '--disable-gpu', '--no-sandbox',
-             '--no-pdf-header-footer', f'--user-data-dir={ud}',
+             '--no-pdf-header-footer', '--virtual-time-budget=15000',
+             f'--user-data-dir={ud}',
              f'--print-to-pdf={out}', url],
-            capture_output=True, timeout=120)
+            capture_output=True, timeout=180)
 
 
 def set_zoom(html: Path, zoom: float):
